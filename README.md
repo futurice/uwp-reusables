@@ -8,10 +8,10 @@ A text box that validates all input, and displays error messages if any of the v
 Can be used in XAML:
 
 ```XAML
-      <vtb:ValidatingTextBox PlaceholderText="No dots or exclamations allowed.">
-                <vtb:ValidationPair ErrorMessage="No dots allowed." ValidationFunction="{x:Bind NoDotsFunction}"/>
-                <vtb:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|" ValidationFunction="{x:Bind NoExclamationsFunction}"/>
-     </vtb:ValidatingTextBox>
+  <vtb:ValidatingTextBox PlaceholderText="No dots or exclamations allowed.">
+            <vtb:ValidationPair ErrorMessage="No dots allowed." ValidationFunction="{x:Bind NoDotsFunction}"/>
+            <vtb:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|" ValidationFunction="{x:Bind NoExclamationsFunction}"/>
+ </vtb:ValidatingTextBox>
 ```
 
 and the validation functions bound to are simply defined in code-behind as follows:
