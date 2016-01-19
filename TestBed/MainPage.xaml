@@ -4,18 +4,574 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TestBed"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vtb="using:ValidatingTextBox"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+    xmlns:validation="using:Controls.Validation"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Margin="10">
-            <vtb:ValidatingTextBox>
-                <vtb:ValidationPair ErrorMessage="I'm invalid!" ValidationFunction="{x:Bind ValidateFunction}"/>
-                <vtb:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|" ValidationFunction="{x:Bind NoExclamationsFunction}"/>
-            </vtb:ValidatingTextBox>
-            <vtb:ValidatingTextBox x:Name="CodeBehindBox"/>
-        </StackPanel>
+        <RelativePanel Margin="10">
+            
+            <validation:ValidatingTextBox x:Name="TopBox" 
+                                   PlaceholderText="No dots or exclamations allowed."
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignRightWithPanel="True">
+                <validation:ValidationPair ErrorMessage="No dots allowed." ValidationFunction="{x:Bind NoDotsFunction}"/>
+                <validation:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|" ValidationFunction="{x:Bind NoExclamationsFunction}"/>
+            </validation:ValidatingTextBox>
+            
+            <validation:ValidatingTextBox x:Name="CodeBehindBox" 
+                                   Margin="0 10 0 0" 
+                                   PlaceholderText="In code-behind: Must contain an @."
+                                   RelativePanel.Below="TopBox"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignRightWithPanel="True"/>
+            
+            <validation:ValidatingTextBox x:Name="CustomGlyphBox" 
+                                   Margin="0 10 0 0" 
+                                   PlaceholderText="No dots, but with a new error hint."
+                                   RelativePanel.Below="CodeBehindBox"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignRightWithPanel="True"
+                                   ErrorHintGlyph="&#xE171;"> <!--Segoe MDL2 big excalmation mark.-->
+                <validation:ValidationPair ErrorMessage="No dots allowed, but now with a new glyph!" ValidationFunction="{x:Bind NoDotsFunction}"/>
+            </validation:ValidatingTextBox>
+
+            <validation:ValidatingTextBox x:Name="CustomErrorHintColor" 
+                                   Margin="0 10 0 0" 
+                                   PlaceholderText="No dots, but now in orange."                                   
+                                   RelativePanel.Below="CustomGlyphBox"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignRightWithPanel="True"
+                                   ErrorHintColor="DarkOrange">
+                <validation:ValidationPair ErrorMessage="No dots allowed--now orange!" ValidationFunction="{x:Bind NoDotsFunction}"/>
+            </validation:ValidatingTextBox>
+
+            <validation:ValidatingTextBox x:Name="ResetDirtyState"
+                                   Margin="0 10 0 0"
+                                   PlaceholderText="Must not be empty."
+                                   RelativePanel.Below="CustomErrorHintColor"
+                                   RelativePanel.AlignLeftWithPanel="True"                                   
+                                   IsDirty="{x:Bind IsResetDirtyStateBoxDirty, Mode=TwoWay}">
+                <validation:ValidationPair ErrorMessage="This text box must not be empty." ValidationFunction="{x:Bind NotEmptyValidator}"/>
+            </validation:ValidatingTextBox>
+            <Button x:Name="ResetDirtyButton"
+                    Margin="0 10 0 0"
+                    RelativePanel.Below="CustomErrorHintColor"
+                    RelativePanel.RightOf="ResetDirtyState"                    
+                    RelativePanel.AlignRightWithPanel="True"
+                    Content="Reset IsDirty"
+                    Tapped="ResetDirtyButton_OnTapped"/>
+        </RelativePanel>
     </Grid>
 </Page>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

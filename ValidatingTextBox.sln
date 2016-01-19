@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatingTextBox", "ValidatingTextBox\ValidatingTextBox.csproj", "{1065EA9F-DDF5-4202-B4FB-BCF6A6A55EE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Controls\Controls.csproj", "{1065EA9F-DDF5-4202-B4FB-BCF6A6A55EE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBed", "TestBed\TestBed.csproj", "{3C4496BA-20A1-46C4-8186-C1E10667C289}"
 EndProject

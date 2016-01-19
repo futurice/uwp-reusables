@@ -7,8 +7,8 @@
     <ProjectGuid>{1065EA9F-DDF5-4202-B4FB-BCF6A6A55EE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ValidatingTextBox</RootNamespace>
-    <AssemblyName>ValidatingTextBox</AssemblyName>
+    <RootNamespace>Controls</RootNamespace>
+    <AssemblyName>Controls</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -107,7 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ValidatingTextBox.cs" />
+    <Compile Include="Validation\ValidatingTextBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ValidatingTextBox.rd.xml" />
   </ItemGroup>

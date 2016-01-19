@@ -131,9 +131,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ValidatingTextBox\ValidatingTextBox.csproj">
+    <ProjectReference Include="..\Controls\Controls.csproj">
       <Project>{1065ea9f-ddf5-4202-b4fb-bcf6a6a55ee1}</Project>
-      <Name>ValidatingTextBox</Name>
+      <Name>Controls</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
