@@ -17,42 +17,42 @@ Can be used in XAML:
 and the validation functions bound to are simply defined in code-behind as follows:
 
 ```C# 	
-	public Func<string, bool> NoDotsFunction { get; set; } = NoDotsFunctionImpl;
-    public Func<string, bool> NoExclamationsFunction { get; set; } = NoExclamationsImpl;
+public Func<string, bool> NoDotsFunction { get; set; } = NoDotsFunctionImpl;
+public Func<string, bool> NoExclamationsFunction { get; set; } = NoExclamationsImpl;
 
-    private static bool NoDotsFunctionImpl(string input)
+private static bool NoDotsFunctionImpl(string input)
+{
+    if (input.Contains("."))
     {
-        if (input.Contains("."))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return false;
     }
+    else
+    {
+        return true;
+    }
+}
 
-    private static bool NoExclamationsImpl(string arg)
+private static bool NoExclamationsImpl(string arg)
+{
+    if (arg.Contains("!"))
     {
-        if (arg.Contains("!"))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return false;
     }
+    else
+    {
+        return true;
+    }
+}
 ```
 
 Or defined in code-behind:
    
 ```C# 
-    string locallyScopedString = "closures work just fine";
-    ValidatingTextBox codeBehindBox = new ValidatingTextBox();
-    codeBehindBox.ValidationPairs.Add(new ValidationPair
-    {
-        ValidationFunction = s => s.Contains("@"),
-        ErrorMessage = $"Gotta have at least one @ here. And {locallyScopedString}!",                
-    });   
+string locallyScopedString = "closures work just fine";
+ValidatingTextBox codeBehindBox = new ValidatingTextBox();
+codeBehindBox.ValidationPairs.Add(new ValidationPair
+{
+    ValidationFunction = s => s.Contains("@"),
+    ErrorMessage = $"Gotta have at least one @ here. And {locallyScopedString}!",                
+});   
 ```       
