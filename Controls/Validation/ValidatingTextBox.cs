@@ -234,7 +234,7 @@ namespace Controls.Validation
             else
             {
                 _isValid = true;
-                IsValid = false;
+                IsValid = true;
             }
 
             if (!errorStateChanged)

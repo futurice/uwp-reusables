@@ -4,574 +4,150 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TestBed"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:validation="using:Controls.Validation"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <RelativePanel Margin="10">
-            
-            <validation:ValidatingTextBox x:Name="TopBox" 
-                                   PlaceholderText="No dots or exclamations allowed."
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.AlignRightWithPanel="True">
-                <validation:ValidationPair ErrorMessage="No dots allowed." ValidationFunction="{x:Bind NoDotsFunction}"/>
-                <validation:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|" ValidationFunction="{x:Bind NoExclamationsFunction}"/>
-            </validation:ValidatingTextBox>
-            
-            <validation:ValidatingTextBox x:Name="CodeBehindBox" 
-                                   Margin="0 10 0 0" 
-                                   PlaceholderText="In code-behind: Must contain an @."
-                                   RelativePanel.Below="TopBox"
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.AlignRightWithPanel="True"/>
-            
-            <validation:ValidatingTextBox x:Name="CustomGlyphBox" 
-                                   Margin="0 10 0 0" 
-                                   PlaceholderText="No dots, but with a new error hint."
-                                   RelativePanel.Below="CodeBehindBox"
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.AlignRightWithPanel="True"
-                                   ErrorHintGlyph="&#xE171;"> <!--Segoe MDL2 big excalmation mark.-->
-                <validation:ValidationPair ErrorMessage="No dots allowed, but now with a new glyph!" ValidationFunction="{x:Bind NoDotsFunction}"/>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="ValidatingTextBox" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="IsValid" Margin="2 0 0 0" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="IsDirty" Margin="2 0 0 0" />
+
+
+            <validation:ValidatingTextBox x:Name="TopBox"
+                                          Grid.Row="1"
+                                          Grid.Column="0"
+                                          PlaceholderText="No dots or exclamations">
+                <validation:ValidationPair ErrorMessage="No dots allowed." ValidationFunction="{x:Bind NoDotsFunction}" />
+                <validation:ValidationPair ErrorMessage="Exclamation marks not allowed either >:|"
+                                           ValidationFunction="{x:Bind NoExclamationsFunction}" />
             </validation:ValidatingTextBox>
 
-            <validation:ValidatingTextBox x:Name="CustomErrorHintColor" 
-                                   Margin="0 10 0 0" 
-                                   PlaceholderText="No dots, but now in orange."                                   
-                                   RelativePanel.Below="CustomGlyphBox"
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.AlignRightWithPanel="True"
-                                   ErrorHintColor="DarkOrange">
-                <validation:ValidationPair ErrorMessage="No dots allowed--now orange!" ValidationFunction="{x:Bind NoDotsFunction}"/>
+            <validation:ValidatingTextBox x:Name="CodeBehindBox"
+                                          Grid.Row="2"
+                                          Grid.Column="0"   
+                                          Margin="0 10 0 0"
+                                          PlaceholderText="In code-behind: Must contain an @" />
+
+            <validation:ValidatingTextBox x:Name="CustomGlyphBox"
+                                          Grid.Row="3"
+                                          Grid.Column="0"
+                                          Margin="0 10 0 0"
+                                          PlaceholderText="No dots, but with a new error hint"                                          
+                                          ErrorHintGlyph="&#xE171;">
+                <!--Segoe MDL2 big excalmation mark.-->
+                <validation:ValidationPair ErrorMessage="No dots allowed, but now with a new glyph!"
+                                           ValidationFunction="{x:Bind NoDotsFunction}" />
+            </validation:ValidatingTextBox>
+
+            <validation:ValidatingTextBox x:Name="CustomErrorHintColor"
+                                          Margin="0 10 0 0"
+                                          PlaceholderText="No dots, but now in orange"
+                                          Grid.Row="4"
+                                          Grid.Column="0"
+                                          ErrorHintColor="DarkOrange">
+                <validation:ValidationPair ErrorMessage="No dots allowed--now orange!"
+                                           ValidationFunction="{x:Bind NoDotsFunction}" />
             </validation:ValidatingTextBox>
 
             <validation:ValidatingTextBox x:Name="ResetDirtyState"
-                                   Margin="0 10 0 0"
-                                   PlaceholderText="Must not be empty."
-                                   RelativePanel.Below="CustomErrorHintColor"
-                                   RelativePanel.AlignLeftWithPanel="True"                                   
-                                   IsDirty="{x:Bind IsResetDirtyStateBoxDirty, Mode=TwoWay}">
-                <validation:ValidationPair ErrorMessage="This text box must not be empty." ValidationFunction="{x:Bind NotEmptyValidator}"/>
+                                          Margin="0 10 0 0"
+                                          PlaceholderText="Must not be empty"
+                                          Grid.Row="5"
+                                          Grid.Column="0"
+                                          IsDirty="{x:Bind IsResetDirtyStateBoxDirty, Mode=TwoWay}">
+                <validation:ValidationPair ErrorMessage="This text box must not be empty."
+                                           ValidationFunction="{x:Bind NotEmptyValidator}" />
             </validation:ValidatingTextBox>
             <Button x:Name="ResetDirtyButton"
                     Margin="0 10 0 0"
-                    RelativePanel.Below="CustomErrorHintColor"
-                    RelativePanel.RightOf="ResetDirtyState"                    
-                    RelativePanel.AlignRightWithPanel="True"
-                    Content="Reset IsDirty"
-                    Tapped="ResetDirtyButton_OnTapped"/>
-        </RelativePanel>
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Content="Reset IsDirty for above TextBox"
+                    Tapped="ResetDirtyButton_OnTapped" />
+            
+            <TextBlock Grid.Row="1" Grid.Column="1" 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind TopBox.IsValid, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}" 
+                       Foreground="{x:Bind TopBox.IsValid, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            <TextBlock Grid.Row="1" Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind TopBox.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}" 
+                       Foreground="{x:Bind TopBox.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            
+            <TextBlock Grid.Row="2" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CodeBehindBox.IsValid, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}" 
+                       Foreground="{x:Bind CodeBehindBox.IsValid, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            <TextBlock Grid.Row="2" Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CodeBehindBox.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind CodeBehindBox.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            
+            <TextBlock Grid.Row="3" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CustomGlyphBox.IsValid, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind CustomGlyphBox.IsValid, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            <TextBlock Grid.Row="3" Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CustomGlyphBox.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind CustomGlyphBox.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CustomErrorHintColor.IsValid, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind CustomErrorHintColor.IsValid, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            <TextBlock Grid.Row="4" Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind CustomErrorHintColor.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind CustomErrorHintColor.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind ResetDirtyState.IsValid, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind ResetDirtyState.IsValid, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            <TextBlock Grid.Row="5" Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0 10 0 0"
+                       Text="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
+                       Foreground="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
+            
+        </Grid>
     </Grid>
 </Page>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
