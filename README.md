@@ -61,3 +61,28 @@ codeBehindBox.ValidationPairs.Add(new ValidationPair
     ErrorMessage = $"Gotta have at least one @ here. And {locallyScopedString}!",                
 });   
 ```       
+
+###ValidatingTextBoxPortable
+
+The portable version of the above ValidatingTextBox. This sacrifices usability in favor of portability. The ValidatingTextBox requires that
+any part of the program that defines validation functions know about the ValidationPair class, and requires a reference to the ValidatingTextBox project.
+The ValidatingTextBoxPortable, however, allows validating functions to be defined without needing that reference. The tradeoff is that the syntax is slightly less friendly.
+
+In XAML: 
+
+```XAML
+  <validation:ValidatingTextBoxPortable PlaceholderText="No dots or exclamations" 
+										ValidationFunctions="{x:Bind TopBoxValidationFunctions}">
+```
+
+And the `TopBoxValidationFunctions` is an `IList<Func<string, string>>`--that is, a List of Functions that take in a string as input, and return a string. It might be defined as follows:
+
+```C#
+public IList<Func<string, string>> TopBoxValidationFunctions => new List<Func<string, string>>
+{
+	input => input.Contains("!") ? "No shouting! Exclamations aren't allowed." : null,
+    input => input.Contains(".") ? "Can't be having none of them dots, either." : null
+};
+```
+
+...and those validation functions treat `null` return values as validation successes, and non-null values are treated as validation failures, with the returned string being interpreted as the error message for that validation function.
