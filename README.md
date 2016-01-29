@@ -3,6 +3,9 @@
 ##Controls
 
 ###ValidatingTextBox
+
+![Animated example](validatingtextbox-example.gif)
+
 A text box that validates all input, and displays error messages if any of the validation functions fail.
 
 Can be used in XAML:
