@@ -11,13 +11,16 @@ using Windows.UI.Xaml.Media;
 
 namespace Controls.Validation
 {
+    /// <summary>
+    /// A textbox that can validate user input, and display errors should the input fail validation.
+    /// </summary>
     [ContentProperty(Name = "ValidationPairs")]    
     public class ValidatingTextBox : TextBox
     {
         private bool _isMousedOver = false;
         private bool _isFocused = false;
         private bool _isValid = false;
-        private readonly List<string> _errorList = new List<string>();
+        private bool _errorFlyoutManuallyOpened = false;        
 
         private Border _errorFlyoutHost;
         private TextBlock _errorFlyoutTextBlock;
@@ -52,11 +55,12 @@ namespace Controls.Validation
             this.PointerEntered += ValidatingTextBox_PointerEntered;
             this.PointerExited += ValidatingTextBox_PointerExited;
             this.GotFocus += ValidatingTextBox_GotFocus;
-            this.LostFocus += ValidatingTextBox_LostFocus;         
-        }
+            this.LostFocus += ValidatingTextBox_LostFocus;            
+        }                        
 
         private void ValidatingTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {             
+        {
+            System.Diagnostics.Debug.WriteLine("Textbox lost focus.");
             _isFocused = false;
             //MouseOver states
             if (_isMousedOver && IsEnabled)
@@ -86,7 +90,8 @@ namespace Controls.Validation
         }
 
         private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {           
+        {
+            System.Diagnostics.Debug.WriteLine("Textbox got focus.");
             _isFocused = true;
             if (IsEnabled)
             {                
@@ -94,6 +99,12 @@ namespace Controls.Validation
                     ? "ValidatingFocused" 
                     : "FocusedError", 
                     false);
+
+                if (!IsValid && IsDirty && _errorFlyout != null) 
+                {
+                    _errorFlyout.ShowAt(_errorFlyoutHost);
+                    this.Focus(FocusState.Programmatic);
+                }
             }
         }
 
@@ -134,7 +145,12 @@ namespace Controls.Validation
             _errorFlyoutHost = GetTemplateChild("BorderElement") as Border;
             _errorFlyout = GetTemplateChild("ErrorFlyout") as Flyout;
             _errorFlyoutTextBlock = GetTemplateChild("ErrorFlyoutTextBlock") as TextBlock;
-            ErrorHint = GetTemplateChild("ErrorHint") as Button;            
+            ErrorHint = GetTemplateChild("ErrorHint") as Button;
+
+            if (_errorFlyout != null)
+            {
+                _errorFlyout.Opened += _errorFlyout_Opened;                
+            }
 
             base.OnApplyTemplate();
         }
@@ -155,6 +171,9 @@ namespace Controls.Validation
             vtb?.ValidateNewInput(vtb.Text);
         }
 
+        /// <summary>
+        /// Whether or not the input box has been modified by user input.
+        /// </summary>
         public bool IsDirty
         {
             get { return (bool)GetValue(IsDirtyProperty); }
@@ -164,7 +183,7 @@ namespace Controls.Validation
         public static readonly DependencyProperty IsValidProperty = 
             DependencyProperty.Register("IsValid", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false));
         /// <summary>
-        /// Surface the current validity of the textbox.
+        /// Whether or not the textbox's current input is valid according to all <see cref="ValidationPair"/>s.
         /// </summary>
         public bool IsValid
         {
@@ -174,6 +193,10 @@ namespace Controls.Validation
 
         public static readonly DependencyProperty ValidationPairsProperty =
             DependencyProperty.Register("ValidationPairs", typeof(List<ValidationPair>), typeof(ValidatingTextBox), new PropertyMetadata(null));        
+
+        /// <summary>
+        /// A list of <see cref="ValidationPair"/>s the textbox validates input against.
+        /// </summary>
         public List<ValidationPair> ValidationPairs
         {
             get { return (List<ValidationPair>)GetValue(ValidationPairsProperty); }
@@ -218,15 +241,17 @@ namespace Controls.Validation
         {
             //Don't do any validation if the input box hasn't been dirtied.
             if (!IsDirty)
-            {
-                _errorList.Clear();
-                UpdateVisualStates();
-                UpdateFlyoutText();
+            {                
+                UpdateVisualStates(null);
+                UpdateFlyoutState(null);
                 return;
             }
-            bool errorStateChanged = UpdateErrorsList(text);
 
-            if (_errorList.Count > 0)
+            List<string> errorsList = ValidateInput(text);            
+            UpdateVisualStates(errorsList);
+            UpdateFlyoutState(errorsList);
+
+            if (errorsList.Count > 0)
             {
                 _isValid = false;
                 IsValid = false;
@@ -235,48 +260,20 @@ namespace Controls.Validation
             {
                 _isValid = true;
                 IsValid = true;
-            }
-
-            if (!errorStateChanged)
-            {
-                return;
-            }            
-            UpdateVisualStates();                      
-            UpdateFlyoutText();
+            }                                   
         }
 
-        private void UpdateFlyoutText()
+        private void UpdateVisualStates(List<string> errorsList)
         {
-            if (_errorFlyoutTextBlock == null)
+            if (errorsList?.Count > 0)
             {
-                return;
-            }
-            StringBuilder sb = new StringBuilder();
-            foreach (var error in _errorList)
-            {
-                if (_errorList.Last() == error)
-                {
-                    sb.Append($"● {error}");
-                }
-                else
-                {
-                    sb.AppendLine($"● {error}");
-                }
-            }
-            _errorFlyoutTextBlock.Text = sb.ToString();
-        }
-
-        private void UpdateVisualStates()
-        {
-            if (_errorList.Count > 0)
-            {                
                 if (ErrorHint != null)
                 {
                     VisualStateManager.GoToState(this, "ErrorHintVisible", true);
                 }
             }
             else
-            {                
+            {
                 if (ErrorHint != null)
                 {
                     VisualStateManager.GoToState(this, "ErrorHintCollapsed", true);
@@ -284,30 +281,77 @@ namespace Controls.Validation
             }
         }
 
-        private bool UpdateErrorsList(string text)
+        private void UpdateFlyoutState(List<string> errorsList)
         {
+            if (_errorFlyoutTextBlock == null || _errorFlyout == null)
+            {
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            if (errorsList != null)
+            {
+                foreach (var error in errorsList)
+                {
+                    if (errorsList.Last() == error)
+                    {
+                        sb.Append($"● {error}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"● {error}");
+                    }
+                }
+            }
+
+            _errorFlyoutTextBlock.Text = sb.ToString();
+            if (errorsList?.Count > 0)
+            {
+                _errorFlyout.ShowAt(_errorFlyoutHost);
+            }
+            if (String.IsNullOrWhiteSpace(sb.ToString()))
+            {
+                _errorFlyout.Hide();
+            }           
+        }
+
+        private List<string> ValidateInput(string text)
+        {
+            List<string> errorsList = new List<string>();
             foreach (var validationPair in ValidationPairs)
             {
                 if (!validationPair.ValidationFunction(text)
-                    && !_errorList.Contains(validationPair.ErrorMessage))
+                    && !errorsList.Contains(validationPair.ErrorMessage))
                 {
-                    _errorList.Add(validationPair.ErrorMessage);
-                    return true;
+                    errorsList.Add(validationPair.ErrorMessage);                    
                 }
+
                 else if (validationPair.ValidationFunction(text)
-                         && _errorList.Contains(validationPair.ErrorMessage))
+                         && errorsList.Contains(validationPair.ErrorMessage))
                 {
-                    _errorList.Remove(validationPair.ErrorMessage);
-                    return true;
+                    errorsList.Remove(validationPair.ErrorMessage);                    
                 }
             }
-            return false;
+            return errorsList;
         }
 
         private void ErrorHint_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            _errorFlyout.ShowAt(_errorFlyoutHost);
-        }        
+            if (_errorFlyout != null)
+            {
+                _errorFlyoutManuallyOpened = true;
+                _errorFlyout.ShowAt(_errorFlyoutHost);
+            }
+        }
+
+        private void _errorFlyout_Opened(object sender, object e)
+        {
+            //Don't force-focus the textbox if the user opens the flyout by tapping the error hint
+            if (!_errorFlyoutManuallyOpened)
+            {
+                this.Focus(FocusState.Programmatic);
+            }
+            _errorFlyoutManuallyOpened = false; //Reset
+        }
     }
 
     /// <summary>
