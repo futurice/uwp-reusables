@@ -14,8 +14,8 @@ namespace Controls.Validation
     /// <summary>
     /// A textbox that can validate user input, and display errors should the input fail validation.
     /// </summary>
-    [ContentProperty(Name = "ValidationPairs")]    
-    public class ValidatingTextBox : TextBox
+    [ContentProperty(Name = "ValidationFunctions")]    
+    public class ValidatingTextBoxPortable : TextBox
     {
         private bool _isMousedOver = false;
         private bool _isFocused = false;
@@ -44,23 +44,22 @@ namespace Controls.Validation
             }
         }        
 
-        public ValidatingTextBox()
+        public ValidatingTextBoxPortable()
         {
-            this.DefaultStyleKey = typeof(ValidatingTextBox);
+            this.DefaultStyleKey = typeof(ValidatingTextBoxPortable);
+            
+            ValidationFunctions = new List<Func<string, string>>();
 
-            ValidationPairs = new List<ValidationPair>();
-
-            this.TextChanged += ValidatingTextBox_TextChanged;
-            this.IsEnabledChanged += ValidatingTextBox_IsEnabledChanged;
-            this.PointerEntered += ValidatingTextBox_PointerEntered;
-            this.PointerExited += ValidatingTextBox_PointerExited;
-            this.GotFocus += ValidatingTextBox_GotFocus;
-            this.LostFocus += ValidatingTextBox_LostFocus;            
+            this.TextChanged += ValidatingTextBoxPortable_TextChanged;
+            this.IsEnabledChanged += ValidatingTextBoxPortable_IsEnabledChanged;
+            this.PointerEntered += ValidatingTextBoxPortable_PointerEntered;
+            this.PointerExited += ValidatingTextBoxPortable_PointerExited;
+            this.GotFocus += ValidatingTextBoxPortable_GotFocus;
+            this.LostFocus += ValidatingTextBoxPortable_LostFocus;            
         }                        
 
-        private void ValidatingTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox lost focus.");
+        private void ValidatingTextBoxPortable_LostFocus(object sender, RoutedEventArgs e)
+        {            
             _isFocused = false;
             //MouseOver states
             if (_isMousedOver && IsEnabled)
@@ -89,9 +88,8 @@ namespace Controls.Validation
             }
         }
 
-        private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox got focus.");
+        private void ValidatingTextBoxPortable_GotFocus(object sender, RoutedEventArgs e)
+        {            
             _isFocused = true;
             if (IsEnabled)
             {                
@@ -108,7 +106,7 @@ namespace Controls.Validation
             }
         }
 
-        private void ValidatingTextBox_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void ValidatingTextBoxPortable_PointerExited(object sender, PointerRoutedEventArgs e)
         {            
             _isMousedOver = false;
             if (!_isFocused && IsEnabled)
@@ -120,7 +118,7 @@ namespace Controls.Validation
             }
         }
 
-        private void ValidatingTextBox_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void ValidatingTextBoxPortable_PointerEntered(object sender, PointerRoutedEventArgs e)
         {            
             _isMousedOver = true;
             if (!_isFocused && IsEnabled)
@@ -132,7 +130,7 @@ namespace Controls.Validation
             }
         }
 
-        private void ValidatingTextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void ValidatingTextBoxPortable_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {            
             VisualStateManager.GoToState(this, _isValid || !IsDirty
                 ? "ValidatingDisabled" 
@@ -156,7 +154,7 @@ namespace Controls.Validation
         }
 
         public static readonly DependencyProperty IsDirtyProperty = 
-            DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false, OnIsDirtyChanged));
+            DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBoxPortable), new PropertyMetadata(false, OnIsDirtyChanged));
 
         private static void OnIsDirtyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -167,7 +165,7 @@ namespace Controls.Validation
                 return;
             }
 
-            var vtb = dependencyObject as ValidatingTextBox;
+            var vtb = dependencyObject as ValidatingTextBoxPortable;
             vtb?.ValidateNewInput(vtb.Text);
         }
 
@@ -181,30 +179,30 @@ namespace Controls.Validation
         }
 
         public static readonly DependencyProperty IsValidProperty = 
-            DependencyProperty.Register("IsValid", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false));
+            DependencyProperty.Register("IsValid", typeof(bool), typeof(ValidatingTextBoxPortable), new PropertyMetadata(false));
         /// <summary>
-        /// Whether or not the textbox's current input is valid according to all <see cref="ValidationPair"/>s.
+        /// Whether or not the textbox's current input is valid according to all the Validation functions in <see cref="ValidationFunctions"/>.
         /// </summary>
         public bool IsValid
         {
             get { return (bool)GetValue(IsValidProperty); }
             set { SetValue(IsValidProperty, value); }
+        }       
+
+        public static readonly DependencyProperty ValidationFunctionsProperty = DependencyProperty.Register(
+            "ValidationFunctions", typeof (IList<Func<string, string>>), typeof (ValidatingTextBoxPortable), new PropertyMetadata(null));
+        
+        /// <summary>
+        /// The collection of functions to validate user input against. On failure, each function should return an error message. On success, each function should return null.
+        /// </summary>
+        public IList<Func<string, string>> ValidationFunctions
+        {
+            get { return (IList<Func<string, string>>) GetValue(ValidationFunctionsProperty); }
+            set { SetValue(ValidationFunctionsProperty, value); }
         }
 
-        public static readonly DependencyProperty ValidationPairsProperty =
-            DependencyProperty.Register("ValidationPairs", typeof(IList<ValidationPair>), typeof(ValidatingTextBox), new PropertyMetadata(null));        
-
-        /// <summary>
-        /// A list of <see cref="ValidationPair"/>s the textbox validates input against.
-        /// </summary>
-        public IList<ValidationPair> ValidationPairs
-        {
-            get { return (IList<ValidationPair>)GetValue(ValidationPairsProperty); }
-            set { SetValue(ValidationPairsProperty, value);}
-        }        
-
         public static readonly DependencyProperty ErrorHintColorProperty = 
-            DependencyProperty.Register("ErrorHintColor", typeof (Brush), typeof (ValidatingTextBox), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
+            DependencyProperty.Register("ErrorHintColor", typeof (Brush), typeof (ValidatingTextBoxPortable), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
         /// <summary>
         /// Gets or sets a brush that defines the color of the error hint circle. Defaults to a Red SolidColorBrush.
         /// </summary>
@@ -215,7 +213,7 @@ namespace Controls.Validation
         }
 
         public static readonly DependencyProperty ErrorHintGlyphProperty = DependencyProperty.Register(
-            "ErrorHintGlyph", typeof (string), typeof (ValidatingTextBox), new PropertyMetadata(""));
+            "ErrorHintGlyph", typeof (string), typeof (ValidatingTextBoxPortable), new PropertyMetadata(""));
         /// <summary>
         /// Gets or sets the glyph that appears in the far right side of the textbox
         /// when input is invalid. Uses Segoe MDL2 Assets symbol font.        
@@ -227,7 +225,7 @@ namespace Controls.Validation
         }
 
 
-        private void ValidatingTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void ValidatingTextBoxPortable_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!IsDirty)
             {
@@ -317,13 +315,14 @@ namespace Controls.Validation
         private List<string> ValidateInput(string text)
         {
             List<string> errorsList = new List<string>();
-            foreach (var validationPair in ValidationPairs)
+            foreach (var validationFunc in ValidationFunctions)
             {
-                if (!validationPair.ValidationFunction(text)
-                    && !errorsList.Contains(validationPair.ErrorMessage))
+                string errorMessage = validationFunc(text);
+
+                if (errorMessage != null && !errorsList.Contains(errorMessage))
                 {
-                    errorsList.Add(validationPair.ErrorMessage);                    
-                }               
+                    errorsList.Add(errorMessage);                    
+                }                
             }
             return errorsList;
         }
@@ -346,20 +345,5 @@ namespace Controls.Validation
             }
             _errorFlyoutManuallyOpened = false; //Reset
         }
-    }
-
-    /// <summary>
-    /// A combination of a validation function, and an error message to display should validation fail.
-    /// </summary>
-    public class ValidationPair
-    {
-        /// <summary>
-        /// A validation function that accepts a string, and should return "true" if the string is valid, and "false" otherwise.
-        /// </summary>
-        public Func<string, bool> ValidationFunction { get; set; }
-        /// <summary>
-        /// The error message to display if the string fails validation.
-        /// </summary>
-        public string ErrorMessage { get; set; }
-    }
+    }  
 }

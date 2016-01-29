@@ -48,7 +48,9 @@ private static bool NoExclamationsImpl(string arg)
 }
 ```
 
-Or defined in code-behind:
+Note that the validation functions are pure, static functions, and could be defined anywhere; your ViewModel, a PCL, whatever.
+
+Can also be defined in code-behind:
    
 ```C# 
 string locallyScopedString = "closures work just fine";
