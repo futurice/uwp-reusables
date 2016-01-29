@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>UWPValidatingTextBox</id>
+    <version>1.0.0</version>
+    <title>UWP Validating TextBox</title>
+    <authors>Futurice Oy</authors>
+    <owners>Futurice Oy</owners>    
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A TextBox control that performs validation on user input.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>custom-control uwp validation textbox input validating-textbox</tags>
+  </metadata>
+</package>

@@ -71,8 +71,8 @@ The ValidatingTextBoxPortable, however, allows validating functions to be define
 In XAML: 
 
 ```XAML
-  <validation:ValidatingTextBoxPortable PlaceholderText="No dots or exclamations" 
-										ValidationFunctions="{x:Bind TopBoxValidationFunctions}">
+<validation:ValidatingTextBoxPortable PlaceholderText="No dots or exclamations" 
+									  ValidationFunctions="{x:Bind TopBoxValidationFunctions}">
 ```
 
 And the `TopBoxValidationFunctions` is an `IList<Func<string, string>>`--that is, a List of Functions that take in a string as input, and return a string. It might be defined as follows:
