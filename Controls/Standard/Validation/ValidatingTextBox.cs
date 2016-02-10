@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,7 +21,8 @@ namespace Controls.Standard.Validation
         private bool _isMousedOver = false;
         private bool _isFocused = false;
         private bool _isValid = false;
-        private bool _errorFlyoutManuallyOpened = false;        
+        private bool _isErrorFlyoutOpen = false;
+        private bool _errorFlyoutManuallyOpened = false;         
 
         private Border _errorFlyoutHost;
         private TextBlock _errorFlyoutTextBlock;
@@ -85,9 +87,8 @@ namespace Controls.Standard.Validation
                     ? "ValidatingDisabled" 
                     : "DisabledError",
                     false);
-            }
-
-            _errorFlyout.Hide();
+            }                  
+                          
         }
 
         private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -149,11 +150,12 @@ namespace Controls.Standard.Validation
 
             if (_errorFlyout != null)
             {
-                _errorFlyout.Opened += _errorFlyout_Opened;                
+                _errorFlyout.Opened += _errorFlyout_Opened;
+                _errorFlyout.Closed += _errorFlyout_Closed;
             }
 
             base.OnApplyTemplate();
-        }
+        }        
 
         public static readonly DependencyProperty IsDirtyProperty = 
             DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false, OnIsDirtyChanged));
@@ -339,12 +341,18 @@ namespace Controls.Standard.Validation
 
         private void _errorFlyout_Opened(object sender, object e)
         {
+            _isErrorFlyoutOpen = true;
             //Don't force-focus the textbox if the user opens the flyout by tapping the error hint
             if (!_errorFlyoutManuallyOpened)
             {
                 this.Focus(FocusState.Programmatic);
             }
             _errorFlyoutManuallyOpened = false; //Reset
+        }
+
+        private void _errorFlyout_Closed(object sender, object e)
+        {
+            _isErrorFlyoutOpen = false;           
         }
     }
 
