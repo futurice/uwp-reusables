@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Controls.Validation;
+using Controls.Standard.Validation;
 
 namespace TestBed
 {

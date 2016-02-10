@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 
-namespace Controls.Validation
+namespace Controls.Portable.Validation
 {
     /// <summary>
     /// A textbox that can validate user input, and display errors should the input fail validation.

@@ -109,8 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\ValidatingTextBox.cs" />
-    <Compile Include="Validation\ValidatingTextBoxPortable.cs" />
+    <Compile Include="Standard\Validation\ValidatingTextBox.cs" />
+    <Compile Include="Portable\Validation\ValidatingTextBoxPortable.cs" />
     <EmbeddedResource Include="Properties\ValidatingTextBox.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +118,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validation\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

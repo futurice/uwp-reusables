@@ -5,7 +5,8 @@
     xmlns:local="using:TestBed"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:validation="using:Controls.Validation"
+    xmlns:stValidation="using:Controls.Standard.Validation"
+    xmlns:prtValidation="using:Controls.Portable.Validation"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="600">
@@ -32,49 +33,49 @@
             <TextBlock Grid.Row="0" Grid.Column="1" Text="IsValid" Margin="2 0 0 0" />
             <TextBlock Grid.Row="0" Grid.Column="2" Text="IsDirty" Margin="2 0 0 0" />
 
-            <validation:ValidatingTextBox x:Name="CodeBehindBox"
+            <stValidation:ValidatingTextBox x:Name="CodeBehindBox"
                                           Grid.Row="1"
                                           Grid.Column="0"                                             
                                           PlaceholderText="In code-behind: Must contain an @" />
 
-            <validation:ValidatingTextBox x:Name="CustomGlyphBox"
+            <stValidation:ValidatingTextBox x:Name="CustomGlyphBox"
                                           Grid.Row="2"
                                           Grid.Column="0"
                                           Margin="0 10 0 0"
                                           PlaceholderText="No dots, but with a new error hint"                                          
                                           ErrorHintGlyph="&#xE171;">
                 <!--Segoe MDL2 big excalmation mark.-->
-                <validation:ValidationPair ErrorMessage="No dots allowed, but now with a new glyph!"
+                <stValidation:ValidationPair ErrorMessage="No dots allowed, but now with a new glyph!"
                                            ValidationFunction="{x:Bind NoDotsFunction}" />
-            </validation:ValidatingTextBox>
+            </stValidation:ValidatingTextBox>
 
-            <validation:ValidatingTextBox x:Name="CustomErrorHintColor"
+            <stValidation:ValidatingTextBox x:Name="CustomErrorHintColor"
                                           Margin="0 10 0 0"
                                           PlaceholderText="No dots, but now in orange"
                                           Grid.Row="3"
                                           Grid.Column="0"
                                           ErrorHintColor="DarkOrange">
-                <validation:ValidationPair ErrorMessage="No dots allowed--now orange!"
+                <stValidation:ValidationPair ErrorMessage="No dots allowed--now orange!"
                                            ValidationFunction="{x:Bind NoDotsFunction}" />
-            </validation:ValidatingTextBox>
+            </stValidation:ValidatingTextBox>
 
-            <validation:ValidatingTextBox x:Name="ResetDirtyState"
+            <stValidation:ValidatingTextBox x:Name="ResetDirtyState"
                                           Margin="0 10 0 0"
                                           PlaceholderText="Must not be empty"
                                           Grid.Row="4"
                                           Grid.Column="0"
                                           IsDirty="{x:Bind IsResetDirtyStateBoxDirty, Mode=TwoWay}">
-                <validation:ValidationPair ErrorMessage="This text box must not be empty."
+                <stValidation:ValidationPair ErrorMessage="This text box must not be empty."
                                            ValidationFunction="{x:Bind NotEmptyValidator}" />
-            </validation:ValidatingTextBox>
+            </stValidation:ValidatingTextBox>
 
-            <validation:ValidatingTextBoxPortable x:Name="TopBox"
+            <prtValidation:ValidatingTextBoxPortable x:Name="TopBox"
                                                   Margin="0 10 0 0"
                                                   Grid.Row="6"
                                                   Grid.Column="0"
                                                   PlaceholderText="No dots or exclamations"
                                                   ValidationFunctions="{x:Bind TopBoxValidationFunctions}">
-            </validation:ValidatingTextBoxPortable>
+            </prtValidation:ValidatingTextBoxPortable>
 
             <Button x:Name="ResetDirtyButton"
                     Margin="0 10 0 0"
