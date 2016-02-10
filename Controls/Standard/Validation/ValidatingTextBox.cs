@@ -59,8 +59,7 @@ namespace Controls.Standard.Validation
         }                        
 
         private void ValidatingTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox lost focus.");
+        {            
             _isFocused = false;
             //MouseOver states
             if (_isMousedOver && IsEnabled)
@@ -87,11 +86,12 @@ namespace Controls.Standard.Validation
                     : "DisabledError",
                     false);
             }
+
+            _errorFlyout.Hide();
         }
 
         private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox got focus.");
+        {            
             _isFocused = true;
             if (IsEnabled)
             {                

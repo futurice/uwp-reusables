@@ -4,7 +4,8 @@
     xmlns:stValidation="using:Controls.Standard.Validation"
     xmlns:prtValidation="using:Controls.Portable.Validation">
 
-    <!--TODO: Make these different shades of red, similar to the shades of the accent color/chrome colors they replace.-->
+    <!--TODO: Make these different shades of red, similar to the shades of the accent color/chrome colors they replace.
+    Also, somehow make them configurable.-->
     <SolidColorBrush x:Key="ControlForegroundChromeDisabledLowErrorBrush" Color="Red"/>
     <SolidColorBrush x:Key="ControlHighlightAccentErrorBrush" Color="Red"/>
     <SolidColorBrush x:Key="ControlHighlightChromeAltLowErrorBrush" Color="Red"/>
