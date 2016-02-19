@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:stValidation="using:Controls.Standard.Validation"
     xmlns:prtValidation="using:Controls.Portable.Validation"
+    xmlns:stFormatting="using:Controls.Standard.Formatting"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="600">
@@ -14,6 +15,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -148,7 +150,19 @@
                        Margin="0 10 0 0"
                        Text="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
                        Foreground="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
-            
+
+            <!-- InlineTransformer examples -->
+            <StackPanel Grid.Row="7" Grid.ColumnSpan="3">
+                <TextBlock Margin="0,10" stFormatting:InlineFormatter.Text="{x:Bind SimpleFormattingText}" />
+                <TextBlock 
+                    Margin="0,10" 
+                    stFormatting:InlineFormatter.Text="{x:Bind ColorFormattingText}"
+                    stFormatting:InlineFormatter.Transformer="{x:Bind ColorTransformer}" />
+                <TextBlock 
+                    Margin="0,10" 
+                    stFormatting:InlineFormatter.Text="{x:Bind LinkFormattingText}" 
+                    stFormatting:InlineFormatter.Transformer="{x:Bind LinkTransformer}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

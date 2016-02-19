@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Standard\Formatting\InlineFormatter.cs" />
     <Compile Include="Standard\Validation\ValidatingTextBox.cs" />
     <Compile Include="Portable\Validation\ValidatingTextBoxPortable.cs" />
     <EmbeddedResource Include="Properties\ValidatingTextBox.rd.xml" />
