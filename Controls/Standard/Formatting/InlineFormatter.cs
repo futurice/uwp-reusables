@@ -67,7 +67,7 @@ namespace Controls.Standard.Formatting
         }
 
         /// <summary>
-        /// The default value of <see cref="TranformerProperty"/>.
+        /// The default value of <see cref="TransformerProperty"/>.
         /// </summary>
         public static Func<XElement, Span> DefaultTransformer { get { return (el) => DefaultTransform(el); } }
 
@@ -97,7 +97,7 @@ namespace Controls.Standard.Formatting
         }
 
         /// <summary>
-        /// Check if both Text and Tranformer attached properties are defined, and perform
+        /// Check if both Text and Transformer attached properties are defined, and perform
         /// the formatting if so, assigning the resulting span to <see cref="TextBlock.Inlines"/>.
         /// </summary>
         private static void TryParseCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
