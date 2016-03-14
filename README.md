@@ -86,3 +86,13 @@ public IList<Func<string, string>> TopBoxValidationFunctions => new List<Func<st
 ```
 
 ...and those validation functions treat `null` return values as validation successes, and non-null values are treated as validation failures, with the returned string being interpreted as the error message for that validation function.
+
+###InlineFormatter
+
+The `InlineFormatter` attached propertes allow binding formatted text strings (e.g. `"<format>This <bold>text</bold> <underline>has</underline> <italic>formatting</italic>!</format>"`) as XAML `TextBlock` content. The feature is implemented by parsing the input string using the platform XML parser and assigning the resulting [`Inline`](https://msdn.microsoft.com/en-us/library/windows/apps/windows.ui.xaml.documents.inline.aspx) tree to [`TextBlock.Inlines`](https://msdn.microsoft.com/en-us/library/windows/apps/windows.ui.xaml.controls.textblock.inlines.aspx).
+
+You might be asking what is the point of such behaviour: in XAML, we can always anyway construct the corresponding Inline tree in code and directly assign it to the target TextBlock. Well, this might be a good idea as long as you never have to localize your app. However, as soon as you start sourcing your UI strings from a localization file, you will most definitely want to specify the logical structure of the formatting in your translated strings. This is not possible by using vanilla bindings, because you can't do anything like `<TextBlock Inlines="{x:Bind MyLocalizedFormatString}" />` (`<TextBlock Text="{x:Bind MyLocalizedSimpleString}" />` works, because `Text` expects a string).
+
+The formatting can be anything supported by XAML Inlines, and you can define your own custom formatter in code, including adding inline links with arbirtrary click handlers. The default formatter only supports mapping the Bold, Underline and Italic tags 1:1. See the TestBed for examples.
+
+This code was inspired by and improved from http://stackoverflow.com/questions/5565885/how-to-bind-a-textblock-to-a-resource-containing-formatted-text
