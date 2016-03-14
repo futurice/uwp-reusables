@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
+using Windows.System;
+using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using UwpReusables.Controls.Standard.Formatting;
 using UwpReusables.Controls.Standard.Validation;
 
 namespace UwpReusables.TestBed
@@ -73,6 +80,77 @@ namespace UwpReusables.TestBed
         private void ResetDirtyButton_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             IsResetDirtyStateBoxDirty = false;
+        }
+
+        /// <summary>
+        /// Sample formatting text using <see cref="InlineFormatter.DefaultTransformer"/>.
+        /// </summary>
+        public string SimpleFormattingText { get; private set; } 
+            = "<format>This <bold>text</bold> <underline>has</underline> <italic>formatting</italic>!</format>";
+
+        /// <summary>
+        /// Sample formatting text using <see cref="ColorTransformer"/>.
+        /// </summary>
+        public string ColorFormattingText { get; private set; } 
+            = "<format>Color <blue>up</blue> <red>your</red> <green>life</green>!</format>";
+
+        /// <summary>
+        /// Sample formatting text using <see cref="ColorTransformer"/>.
+        /// </summary>
+        public string LinkFormattingText { get; private set; } 
+            = @"<format>Click <close>here</close> to close the app, or <a href=""http://futurice.com"">here</a> to go to our home page.</format>";
+
+        /// <summary>
+        /// The XML => <see cref="Span"/> transformer for colored text. See <see cref="InlineFormatter"/>.
+        /// </summary>
+        public Func<XElement, Span> ColorTransformer { get; private set; } = ColorTransformImpl;
+
+        /// <summary>
+        /// Implementation for <see cref="ColorTransformer"/>.
+        /// </summary>
+        /// <param name="el">Formatting input XML element.</param>
+        /// <returns><see cref="Span"/> with properties corresponding to <paramref name="el"/>.</returns>
+        private static Span ColorTransformImpl(XElement el)
+        {
+            switch (el.Name.LocalName.ToLowerInvariant())
+            {
+                case "red":
+                    return new Span() { Foreground = new SolidColorBrush(Colors.Red) };
+                case "green":
+                    return new Span() { Foreground = new SolidColorBrush(Colors.Green) };
+                case "blue":
+                    return new Span() { Foreground = new SolidColorBrush(Colors.Blue) };
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// The XML => <see cref="Span"/> transformer for link text. See <see cref="InlineFormatter"/>.
+        /// </summary>
+        public Func<XElement, Span> LinkTransformer { get; private set; } = LinkTransformerImpl;
+
+        /// <summary>
+        /// Implementation for <see cref="LinkTransformer"/>.
+        /// </summary>
+        /// <param name="el">Formatting input XML element.</param>
+        /// <returns><see cref="Span"/> with properties corresponding to <paramref name="el"/>.</returns>
+        private static Span LinkTransformerImpl(XElement el)
+        {
+            Hyperlink link;
+            switch (el.Name.LocalName.ToLowerInvariant())
+            {
+                case "close":
+                    link = new Hyperlink() { Foreground = new SolidColorBrush(Colors.Blue) };
+                    link.Click += (_, __) => Application.Current.Exit();
+                    return link;
+                case "a":
+                    link = new Hyperlink() { Foreground = new SolidColorBrush(Colors.Blue) };
+                    link.Click += async (_, __) => await Launcher.LaunchUriAsync(new Uri(el.Attribute("href")?.Value));
+                    return link;
+                default:
+                    return null;
+            }
         }
     }
 }
