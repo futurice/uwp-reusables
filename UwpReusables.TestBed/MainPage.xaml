@@ -1,12 +1,11 @@
 ﻿<Page
-    x:Class="TestBed.MainPage"
+    x:Class="UwpReusables.TestBed.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TestBed"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:stValidation="using:Controls.Standard.Validation"
-    xmlns:prtValidation="using:Controls.Portable.Validation"
+    xmlns:stValidation="using:UwpReusables.Controls.Standard.Validation"
+    xmlns:prtValidation="using:UwpReusables.Controls.Portable.Validation"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="600">
@@ -83,7 +82,7 @@
                     Grid.Column="0"
                     Content="Reset IsDirty for above TextBox"
                     Tapped="ResetDirtyButton_OnTapped" />
-            
+
             <TextBlock Grid.Row="6" Grid.Column="1" 
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -96,7 +95,7 @@
                        Margin="0 10 0 0"
                        Text="{x:Bind TopBox.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}" 
                        Foreground="{x:Bind TopBox.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
-            
+
             <TextBlock Grid.Row="1" Grid.Column="1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -109,7 +108,7 @@
                        Margin="0 10 0 0"
                        Text="{x:Bind CodeBehindBox.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
                        Foreground="{x:Bind CodeBehindBox.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
-            
+
             <TextBlock Grid.Row="2" Grid.Column="1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -148,7 +147,7 @@
                        Margin="0 10 0 0"
                        Text="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToGlyphConverter}, Mode=OneWay}"
                        Foreground="{x:Bind ResetDirtyState.IsDirty, Converter={StaticResource BooleanToColorConverter}, Mode=OneWay}"/>
-            
+
         </Grid>
     </Grid>
 </Page>

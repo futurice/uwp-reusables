@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
-namespace TestBed.Converters
+namespace UwpReusables.TestBed.Converters
 {
-    public class BooleanToGlyphConverter : IValueConverter
+    public class BooleanToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool input = (bool) value;
-            return input ? "✓" : "X";
+            bool input = (bool)value;
+            return input ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

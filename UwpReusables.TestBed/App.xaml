@@ -1,13 +1,14 @@
 ﻿<Application
-    x:Class="TestBed.App"
+    x:Class="UwpReusables.TestBed.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TestBed"
-    xmlns:converters="using:TestBed.Converters"
+    xmlns:local="using:UwpReusables.TestBed"
+    xmlns:converters="using:UwpReusables.TestBed.Converters"
     RequestedTheme="Light">
 
     <Application.Resources>
         <converters:BooleanToGlyphConverter x:Key="BooleanToGlyphConverter" />
         <converters:BooleanToColorConverter x:Key="BooleanToColorConverter" />
     </Application.Resources>
+
 </Application>

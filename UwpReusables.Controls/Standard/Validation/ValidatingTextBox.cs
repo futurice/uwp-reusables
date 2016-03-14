@@ -9,18 +9,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 
-namespace Controls.Portable.Validation
+namespace UwpReusables.Controls.Standard.Validation
 {
     /// <summary>
     /// A textbox that can validate user input, and display errors should the input fail validation.
     /// </summary>
-    [ContentProperty(Name = "ValidationFunctions")]    
-    public class ValidatingTextBoxPortable : TextBox
+    [ContentProperty(Name = "ValidationPairs")]
+    public class ValidatingTextBox : TextBox
     {
         private bool _isMousedOver = false;
         private bool _isFocused = false;
         private bool _isValid = false;
-        private bool _errorFlyoutManuallyOpened = false;        
+        private bool _errorFlyoutManuallyOpened = false;
 
         private Border _errorFlyoutHost;
         private TextBlock _errorFlyoutTextBlock;
@@ -42,63 +42,65 @@ namespace Controls.Portable.Validation
                     _errorHint.Tapped += ErrorHint_Tapped;
                 }
             }
-        }        
+        }
 
-        public ValidatingTextBoxPortable()
+        public ValidatingTextBox()
         {
-            this.DefaultStyleKey = typeof(ValidatingTextBoxPortable);
-            
-            ValidationFunctions = new List<Func<string, string>>();
+            this.DefaultStyleKey = typeof(ValidatingTextBox);
 
-            this.TextChanged += ValidatingTextBoxPortable_TextChanged;
-            this.IsEnabledChanged += ValidatingTextBoxPortable_IsEnabledChanged;
-            this.PointerEntered += ValidatingTextBoxPortable_PointerEntered;
-            this.PointerExited += ValidatingTextBoxPortable_PointerExited;
-            this.GotFocus += ValidatingTextBoxPortable_GotFocus;
-            this.LostFocus += ValidatingTextBoxPortable_LostFocus;            
-        }                        
+            ValidationPairs = new List<ValidationPair>();
 
-        private void ValidatingTextBoxPortable_LostFocus(object sender, RoutedEventArgs e)
-        {            
+            this.TextChanged += ValidatingTextBox_TextChanged;
+            this.IsEnabledChanged += ValidatingTextBox_IsEnabledChanged;
+            this.PointerEntered += ValidatingTextBox_PointerEntered;
+            this.PointerExited += ValidatingTextBox_PointerExited;
+            this.GotFocus += ValidatingTextBox_GotFocus;
+            this.LostFocus += ValidatingTextBox_LostFocus;
+        }
+
+        private void ValidatingTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Textbox lost focus.");
             _isFocused = false;
             //MouseOver states
             if (_isMousedOver && IsEnabled)
             {
-                
+
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingPointerOver" 
-                    : "PointerOverError", 
+                    ? "ValidatingPointerOver"
+                    : "PointerOverError",
                     false);
             }
             //Enabled states
             else if (IsEnabled)
-            {                
+            {
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingNormal" 
-                    : "NormalError", 
+                    ? "ValidatingNormal"
+                    : "NormalError",
                     false);
             }
             //Disabled states
             else
-            {                
+            {
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingDisabled" 
+                    ? "ValidatingDisabled"
                     : "DisabledError",
                     false);
             }
         }
 
-        private void ValidatingTextBoxPortable_GotFocus(object sender, RoutedEventArgs e)
-        {            
+        private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Textbox got focus.");
             _isFocused = true;
             if (IsEnabled)
-            {                
+            {
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingFocused" 
-                    : "FocusedError", 
+                    ? "ValidatingFocused"
+                    : "FocusedError",
                     false);
 
-                if (!IsValid && IsDirty && _errorFlyout != null) 
+                if (!IsValid && IsDirty && _errorFlyout != null)
                 {
                     _errorFlyout.ShowAt(_errorFlyoutHost);
                     this.Focus(FocusState.Programmatic);
@@ -106,34 +108,34 @@ namespace Controls.Portable.Validation
             }
         }
 
-        private void ValidatingTextBoxPortable_PointerExited(object sender, PointerRoutedEventArgs e)
-        {            
+        private void ValidatingTextBox_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
             _isMousedOver = false;
             if (!_isFocused && IsEnabled)
-            {                
+            {
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingNormal" 
-                    : "NormalError", 
+                    ? "ValidatingNormal"
+                    : "NormalError",
                     false);
             }
         }
 
-        private void ValidatingTextBoxPortable_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {            
+        private void ValidatingTextBox_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
             _isMousedOver = true;
             if (!_isFocused && IsEnabled)
-            {                
+            {
                 VisualStateManager.GoToState(this, _isValid || !IsDirty
-                    ? "ValidatingPointerOver" 
-                    : "PointerOverError", 
+                    ? "ValidatingPointerOver"
+                    : "PointerOverError",
                     false);
             }
         }
 
-        private void ValidatingTextBoxPortable_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {            
+        private void ValidatingTextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
             VisualStateManager.GoToState(this, _isValid || !IsDirty
-                ? "ValidatingDisabled" 
+                ? "ValidatingDisabled"
                 : "DisabledError",
                 false);
         }
@@ -147,25 +149,25 @@ namespace Controls.Portable.Validation
 
             if (_errorFlyout != null)
             {
-                _errorFlyout.Opened += _errorFlyout_Opened;                
+                _errorFlyout.Opened += _errorFlyout_Opened;
             }
 
             base.OnApplyTemplate();
         }
 
-        public static readonly DependencyProperty IsDirtyProperty = 
-            DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBoxPortable), new PropertyMetadata(false, OnIsDirtyChanged));
+        public static readonly DependencyProperty IsDirtyProperty =
+            DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false, OnIsDirtyChanged));
 
         private static void OnIsDirtyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             bool oldValue = (bool)dependencyPropertyChangedEventArgs.OldValue;
-            bool newValue = (bool) dependencyPropertyChangedEventArgs.NewValue;
+            bool newValue = (bool)dependencyPropertyChangedEventArgs.NewValue;
             if (oldValue == newValue)
             {
                 return;
             }
 
-            var vtb = dependencyObject as ValidatingTextBoxPortable;
+            var vtb = dependencyObject as ValidatingTextBox;
             vtb?.ValidateNewInput(vtb.Text);
         }
 
@@ -178,54 +180,54 @@ namespace Controls.Portable.Validation
             set { SetValue(IsDirtyProperty, value); }
         }
 
-        public static readonly DependencyProperty IsValidProperty = 
-            DependencyProperty.Register("IsValid", typeof(bool), typeof(ValidatingTextBoxPortable), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsValidProperty =
+            DependencyProperty.Register("IsValid", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false));
         /// <summary>
-        /// Whether or not the textbox's current input is valid according to all the Validation functions in <see cref="ValidationFunctions"/>.
+        /// Whether or not the textbox's current input is valid according to all <see cref="ValidationPair"/>s.
         /// </summary>
         public bool IsValid
         {
             get { return (bool)GetValue(IsValidProperty); }
             set { SetValue(IsValidProperty, value); }
-        }       
-
-        public static readonly DependencyProperty ValidationFunctionsProperty = DependencyProperty.Register(
-            "ValidationFunctions", typeof (IList<Func<string, string>>), typeof (ValidatingTextBoxPortable), new PropertyMetadata(null));
-        
-        /// <summary>
-        /// The collection of functions to validate user input against. On failure, each function should return an error message. On success, each function should return null.
-        /// </summary>
-        public IList<Func<string, string>> ValidationFunctions
-        {
-            get { return (IList<Func<string, string>>) GetValue(ValidationFunctionsProperty); }
-            set { SetValue(ValidationFunctionsProperty, value); }
         }
 
-        public static readonly DependencyProperty ErrorHintColorProperty = 
-            DependencyProperty.Register("ErrorHintColor", typeof (Brush), typeof (ValidatingTextBoxPortable), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
+        public static readonly DependencyProperty ValidationPairsProperty =
+            DependencyProperty.Register("ValidationPairs", typeof(IList<ValidationPair>), typeof(ValidatingTextBox), new PropertyMetadata(null));
+
+        /// <summary>
+        /// A list of <see cref="ValidationPair"/>s the textbox validates input against.
+        /// </summary>
+        public IList<ValidationPair> ValidationPairs
+        {
+            get { return (IList<ValidationPair>)GetValue(ValidationPairsProperty); }
+            set { SetValue(ValidationPairsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ErrorHintColorProperty =
+            DependencyProperty.Register("ErrorHintColor", typeof(Brush), typeof(ValidatingTextBox), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
         /// <summary>
         /// Gets or sets a brush that defines the color of the error hint circle. Defaults to a Red SolidColorBrush.
         /// </summary>
         public Brush ErrorHintColor
         {
-            get { return (Brush) GetValue(ErrorHintColorProperty); }
+            get { return (Brush)GetValue(ErrorHintColorProperty); }
             set { SetValue(ErrorHintColorProperty, value); }
         }
 
         public static readonly DependencyProperty ErrorHintGlyphProperty = DependencyProperty.Register(
-            "ErrorHintGlyph", typeof (string), typeof (ValidatingTextBoxPortable), new PropertyMetadata(""));
+            "ErrorHintGlyph", typeof(string), typeof(ValidatingTextBox), new PropertyMetadata(""));
         /// <summary>
         /// Gets or sets the glyph that appears in the far right side of the textbox
         /// when input is invalid. Uses Segoe MDL2 Assets symbol font.        
         /// </summary>
         public string ErrorHintGlyph
         {
-            get { return (string) GetValue(ErrorHintGlyphProperty); }
+            get { return (string)GetValue(ErrorHintGlyphProperty); }
             set { SetValue(ErrorHintGlyphProperty, value); }
         }
 
 
-        private void ValidatingTextBoxPortable_TextChanged(object sender, TextChangedEventArgs e)
+        private void ValidatingTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!IsDirty)
             {
@@ -239,13 +241,13 @@ namespace Controls.Portable.Validation
         {
             //Don't do any validation if the input box hasn't been dirtied.
             if (!IsDirty)
-            {                
+            {
                 UpdateVisualStates(null);
                 UpdateFlyoutState(null);
                 return;
             }
 
-            List<string> errorsList = ValidateInput(text);            
+            List<string> errorsList = ValidateInput(text);
             UpdateVisualStates(errorsList);
             UpdateFlyoutState(errorsList);
 
@@ -258,7 +260,7 @@ namespace Controls.Portable.Validation
             {
                 _isValid = true;
                 IsValid = true;
-            }                                   
+            }
         }
 
         private void UpdateVisualStates(List<string> errorsList)
@@ -309,20 +311,19 @@ namespace Controls.Portable.Validation
             if (String.IsNullOrWhiteSpace(sb.ToString()))
             {
                 _errorFlyout.Hide();
-            }           
+            }
         }
 
         private List<string> ValidateInput(string text)
         {
             List<string> errorsList = new List<string>();
-            foreach (var validationFunc in ValidationFunctions)
+            foreach (var validationPair in ValidationPairs)
             {
-                string errorMessage = validationFunc(text);
-
-                if (errorMessage != null && !errorsList.Contains(errorMessage))
+                if (!validationPair.ValidationFunction(text)
+                    && !errorsList.Contains(validationPair.ErrorMessage))
                 {
-                    errorsList.Add(errorMessage);                    
-                }                
+                    errorsList.Add(validationPair.ErrorMessage);
+                }
             }
             return errorsList;
         }
@@ -345,5 +346,20 @@ namespace Controls.Portable.Validation
             }
             _errorFlyoutManuallyOpened = false; //Reset
         }
-    }  
+    }
+
+    /// <summary>
+    /// A combination of a validation function, and an error message to display should validation fail.
+    /// </summary>
+    public class ValidationPair
+    {
+        /// <summary>
+        /// A validation function that accepts a string, and should return "true" if the string is valid, and "false" otherwise.
+        /// </summary>
+        public Func<string, bool> ValidationFunction { get; set; }
+        /// <summary>
+        /// The error message to display if the string fails validation.
+        /// </summary>
+        public string ErrorMessage { get; set; }
+    }
 }

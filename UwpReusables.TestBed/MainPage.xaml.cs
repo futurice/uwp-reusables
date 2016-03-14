@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Controls.Standard.Validation;
+using UwpReusables.Controls.Standard.Validation;
 
-namespace TestBed
+namespace UwpReusables.TestBed
 {
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
@@ -61,12 +61,12 @@ namespace TestBed
         private static bool NotEmptyImpl(string arg)
         {
             return !String.IsNullOrWhiteSpace(arg);
-        }        
+        }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;        
+        public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {           
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
