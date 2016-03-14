@@ -6,8 +6,8 @@ Current status:
 **Not ready for release**
 
 What needs to be done?
- * Stabilize ValidatingTextBox's popup. It steals focus whenever it appears with some nasty side effects.
- * Figure out a NuGet packaging scheme.
+ * Stabilize ValidatingTextBox's popup. It steals focus whenever it appears with some nasty side effects. See [Issue #2](https://github.com/futurice/uwp-reusables/issues/2) for details.
+ * Figure out a NuGet packaging scheme. See [Issue #5 ](https://github.com/futurice/uwp-reusables/issues/5) for details.
 
 ##Controls
 
