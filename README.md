@@ -1,5 +1,14 @@
 # UWP Reusables
 
+A collection of logic and controls that are generically useful for any UWP project.
+
+Current status: 
+**Not ready for release**
+
+What needs to be done?
+ * Stabilize ValidatingTextBox's popup. It steals focus whenever it appears with some nasty side effects.
+ * Figure out a NuGet packaging scheme.
+
 ##Controls
 
 ###ValidatingTextBox
