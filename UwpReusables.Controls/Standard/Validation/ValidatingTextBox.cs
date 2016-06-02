@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,12 +20,9 @@ namespace UwpReusables.Controls.Standard.Validation
     {
         private bool _isMousedOver = false;
         private bool _isFocused = false;
-        private bool _isValid = false;
-        private bool _errorFlyoutManuallyOpened = false;
-
-        private Border _errorFlyoutHost;
-        private TextBlock _errorFlyoutTextBlock;
-        private Flyout _errorFlyout;
+        private bool _isValid = false;                
+               
+        private ToolTip _errorToolTip;
 
         private Button _errorHint;
         private Button ErrorHint
@@ -59,8 +57,7 @@ namespace UwpReusables.Controls.Standard.Validation
         }
 
         private void ValidatingTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox lost focus.");
+        {                        
             _isFocused = false;
             //MouseOver states
             if (_isMousedOver && IsEnabled)
@@ -87,11 +84,12 @@ namespace UwpReusables.Controls.Standard.Validation
                     : "DisabledError",
                     false);
             }
+
+            CloseToolTip();
         }
 
         private void ValidatingTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Textbox got focus.");
+        {            
             _isFocused = true;
             if (IsEnabled)
             {
@@ -100,10 +98,9 @@ namespace UwpReusables.Controls.Standard.Validation
                     : "FocusedError",
                     false);
 
-                if (!IsValid && IsDirty && _errorFlyout != null)
+                if (!IsValid && IsDirty && _errorToolTip != null)
                 {
-                    _errorFlyout.ShowAt(_errorFlyoutHost);
-                    this.Focus(FocusState.Programmatic);
+                    OpenToolTip();
                 }
             }
         }
@@ -141,19 +138,12 @@ namespace UwpReusables.Controls.Standard.Validation
         }
 
         protected override void OnApplyTemplate()
-        {
-            _errorFlyoutHost = GetTemplateChild("BorderElement") as Border;
-            _errorFlyout = GetTemplateChild("ErrorFlyout") as Flyout;
-            _errorFlyoutTextBlock = GetTemplateChild("ErrorFlyoutTextBlock") as TextBlock;
-            ErrorHint = GetTemplateChild("ErrorHint") as Button;
-
-            if (_errorFlyout != null)
-            {
-                _errorFlyout.Opened += _errorFlyout_Opened;
-            }
+        {            
+            _errorToolTip = GetTemplateChild("ErrorToolTip") as ToolTip;            
+            ErrorHint = GetTemplateChild("ErrorHint") as Button;            
 
             base.OnApplyTemplate();
-        }
+        }        
 
         public static readonly DependencyProperty IsDirtyProperty =
             DependencyProperty.Register("IsDirty", typeof(bool), typeof(ValidatingTextBox), new PropertyMetadata(false, OnIsDirtyChanged));
@@ -283,7 +273,7 @@ namespace UwpReusables.Controls.Standard.Validation
 
         private void UpdateFlyoutState(List<string> errorsList)
         {
-            if (_errorFlyoutTextBlock == null || _errorFlyout == null)
+            if (_errorToolTip == null)
             {
                 return;
             }
@@ -303,14 +293,14 @@ namespace UwpReusables.Controls.Standard.Validation
                 }
             }
 
-            _errorFlyoutTextBlock.Text = sb.ToString();
+            _errorToolTip.Content = sb.ToString();
             if (errorsList?.Count > 0)
             {
-                _errorFlyout.ShowAt(_errorFlyoutHost);
+                OpenToolTip();
             }
             if (String.IsNullOrWhiteSpace(sb.ToString()))
             {
-                _errorFlyout.Hide();
+                CloseToolTip();
             }
         }
 
@@ -330,21 +320,32 @@ namespace UwpReusables.Controls.Standard.Validation
 
         private void ErrorHint_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (_errorFlyout != null)
+            if(_errorToolTip?.IsOpen == true)
             {
-                _errorFlyoutManuallyOpened = true;
-                _errorFlyout.ShowAt(_errorFlyoutHost);
+                CloseToolTip();
+            }
+            else if(_errorToolTip?.IsOpen == false)
+            {
+                OpenToolTip();
             }
         }
 
-        private void _errorFlyout_Opened(object sender, object e)
+        private void OpenToolTip()
         {
-            //Don't force-focus the textbox if the user opens the flyout by tapping the error hint
-            if (!_errorFlyoutManuallyOpened)
+            if (_errorToolTip != null)
             {
-                this.Focus(FocusState.Programmatic);
+                _errorToolTip.Visibility = Visibility.Visible;
+                _errorToolTip.IsOpen = true;
             }
-            _errorFlyoutManuallyOpened = false; //Reset
+        }
+
+        private void CloseToolTip()
+        {
+            if (_errorToolTip != null)
+            {
+                _errorToolTip.Visibility = Visibility.Collapsed;
+                _errorToolTip.IsOpen = false;
+            }
         }
     }
 
