@@ -3,8 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ms-appx:///UwpReusables.Controls/Portable/Validation/ValidatingTextBoxPortableStyle.xaml"/>
-        <ResourceDictionary Source="ms-appx:///UwpReusables.Controls/Standard/Validation/ValidatingTextBoxStyle.xaml"/>
+        <ResourceDictionary Source="ms-appx:///UwpReusables.Controls/Core/ValidatingTextBoxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
