@@ -7,6 +7,7 @@
     xmlns:stValidation="using:UwpReusables.Controls.Standard.Validation"
     xmlns:prtValidation="using:UwpReusables.Controls.Portable.Validation"
     xmlns:formatting="using:UwpReusables.Controls.Standard.Formatting"
+    xmlns:input="using:UwpReusables.Controls.Standard.Input"
 
     mc:Ignorable="d"
     d:DesignHeight="400"
@@ -163,6 +164,20 @@
                     <TextBlock Margin="0 10 0 10" 
                                formatting:InlineFormatter.Text="{x:Bind LinkFormattingText}" 
                                formatting:InlineFormatter.Transformer="{x:Bind LinkTransformer}" />
+                    
+                    <input:SearchableComboBox PlaceholderText="I'm a dropdown!" DropDownOpened="ComboBox_OnDropDownOpened" DropDownClosed="ComboBox_OnDropDownClosed">
+                        <ComboBoxItem>Item 1</ComboBoxItem>
+                        <ComboBoxItem>Item 2</ComboBoxItem>
+                        <ComboBoxItem>Item 3</ComboBoxItem>
+                    </input:SearchableComboBox>
+                    <TextBlock x:Name="DropdownStatusBlock" Foreground="Red" Text="Dropdown Status: Closed"/>
+
+                <ComboBox PlaceholderText="I'm a normal dropdown!">
+                    <ComboBoxItem>Item 1</ComboBoxItem>
+                    <ComboBoxItem>Item 2</ComboBoxItem>
+                    <ComboBoxItem>Item 3</ComboBoxItem>
+                </ComboBox>
+                    
                 </StackPanel>
         </Grid>
     </Grid>

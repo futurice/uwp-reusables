@@ -152,5 +152,15 @@ namespace UwpReusables.TestBed
                     return null;
             }
         }
+
+        private void ComboBox_OnDropDownOpened(object sender, object e)
+        {
+            DropdownStatusBlock.Text = "DropdownStatus: Open";
+        }
+
+        private void ComboBox_OnDropDownClosed(object sender, object e)
+        {
+            DropdownStatusBlock.Text = "DropdownStatus: Closed";
+        }
     }
 }

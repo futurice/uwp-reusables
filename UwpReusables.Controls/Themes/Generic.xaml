@@ -1,9 +1,10 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ms-appx:///UwpReusables.Controls/Core/ValidatingTextBoxStyle.xaml"/>
+        <ResourceDictionary Source="ms-appx:///UwpReusables.Controls/Standard/Input/SearchableComboBoxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
