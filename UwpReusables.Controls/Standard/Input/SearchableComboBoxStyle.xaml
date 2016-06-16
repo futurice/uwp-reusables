@@ -15,8 +15,7 @@
     <Thickness x:Key="ComboBoxPopupBorderThemeThickness">2</Thickness>
     <FontWeight x:Key="ComboBoxHeaderThemeFontWeight">Normal</FontWeight>
     <FontWeight x:Key="ComboBoxPlaceholderTextThemeFontWeight">SemiLight</FontWeight>
-
-    <!-- Default style for Windows.UI.Xaml.Controls.ComboBox -->
+    
     <Style TargetType="local:SearchableComboBox">
         <Setter Property="Padding" Value="12,5,0,7" />
         <Setter Property="MinWidth" Value="{ThemeResource ComboBoxThemeMinWidth}" />
@@ -40,7 +39,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <CarouselPanel />
+                    <VirtualizingStackPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -195,20 +194,14 @@
                             <VisualStateGroup x:Name="DropDownStates">
                                 <VisualState x:Name="Opened">
                                     <Storyboard>
-                                        <SplitOpenThemeAnimation
-                                            OpenedTargetName="PopupBorder"
-                                            ClosedTargetName="ContentPresenter"                                            
-                                            OffsetFromCenter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownOffset}"
-                                            OpenedLength="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownOpenedHeight}" />
+                                        <PopInThemeAnimation TargetName="PopupBorder" 
+                                                             FromVerticalOffset="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DropDownOffset}"
+                                                             FromHorizontalOffset="0"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Closed">
                                     <Storyboard>
-                                        <SplitCloseThemeAnimation
-                                            OpenedTargetName="PopupBorder"
-                                            ClosedTargetName="ContentPresenter"
-                                            OffsetFromCenter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownOffset}"
-                                            OpenedLength="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownOpenedHeight}" />
+                                        <PopOutThemeAnimation TargetName="PopupBorder"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -235,12 +228,12 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Opacity="0" />
                         <ContentPresenter x:Name="ContentPresenter"
-                                          Grid.Row="1"
+                                          Grid.Row="1"                                          
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             <TextBlock x:Name="PlaceholderTextBlock"
-                                       Text="{TemplateBinding PlaceholderText}"
+                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PlaceholderText}"
                                        Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" />
                         </ContentPresenter>
                         <FontIcon x:Name="DropDownGlyph"
@@ -255,7 +248,7 @@
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Center"
                                   AutomationProperties.AccessibilityView="Raw" />
-                        <Popup x:Name="Popup">
+                        <Popup x:Name="Popup" IsLightDismissEnabled="True">
                             <Border x:Name="PopupBorder"
                                 Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
                                 BorderBrush="{ThemeResource SystemControlForegroundChromeHighBrush}"
@@ -263,14 +256,14 @@
                                 Margin="0,-1,0,-1"
                                 HorizontalAlignment="Stretch">
                                 <StackPanel>
-                                    <TextBox x:Name="PopupSearchBox" 
+                                <TextBox x:Name="PopupSearchBox" 
                                              Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
                                              BorderThickness="0"
-                                             MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownContentMinWidth}"
+                                             MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DropDownContentMinWidth}"
                                              PlaceholderText="{TemplateBinding PlaceholderText}"/>
-                                    <ScrollViewer x:Name="ScrollViewer"
+                                <ScrollViewer x:Name="ScrollViewer"
                                               Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
-                                              MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DropDownContentMinWidth}"
+                                              MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DropDownContentMinWidth}"
                                               VerticalSnapPointsType="OptionalSingle"
                                               VerticalSnapPointsAlignment="Near"
                                               HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
@@ -283,7 +276,7 @@
                                               BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
                                               ZoomMode="Disabled"
                                               AutomationProperties.AccessibilityView="Raw">
-                                    <ItemsPresenter Margin="{ThemeResource ComboBoxDropdownContentMargin}" />
+                                        <ItemsPresenter Margin="{ThemeResource ComboBoxDropdownContentMargin}" />
                                 </ScrollViewer>
                                 </StackPanel>
                             </Border>

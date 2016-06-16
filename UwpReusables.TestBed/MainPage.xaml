@@ -10,7 +10,7 @@
     xmlns:input="using:UwpReusables.Controls.Standard.Input"
 
     mc:Ignorable="d"
-    d:DesignHeight="400"
+    d:DesignHeight="800"
     d:DesignWidth="600">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -164,12 +164,9 @@
                     <TextBlock Margin="0 10 0 10" 
                                formatting:InlineFormatter.Text="{x:Bind LinkFormattingText}" 
                                formatting:InlineFormatter.Transformer="{x:Bind LinkTransformer}" />
-                    
-                    <input:SearchableComboBox PlaceholderText="I'm a dropdown!" DropDownOpened="ComboBox_OnDropDownOpened" DropDownClosed="ComboBox_OnDropDownClosed">
-                        <ComboBoxItem>Item 1</ComboBoxItem>
-                        <ComboBoxItem>Item 2</ComboBoxItem>
-                        <ComboBoxItem>Item 3</ComboBoxItem>
-                    </input:SearchableComboBox>
+
+                <input:SearchableComboBox x:Name="SearchableBox" PlaceholderText="Test!" ItemsSource="{x:Bind SearchableBoxItems, Mode=OneWay}">
+                </input:SearchableComboBox>
                     <TextBlock x:Name="DropdownStatusBlock" Foreground="Red" Text="Dropdown Status: Closed"/>
 
                 <ComboBox PlaceholderText="I'm a normal dropdown!">
@@ -178,7 +175,10 @@
                     <ComboBoxItem>Item 3</ComboBoxItem>
                 </ComboBox>
                     
-                </StackPanel>
+                <ComboBoxItem x:Name="TestComboBoxItem" Style="{StaticResource ComboBoxItemStyleExample}" PointerEntered="TestComboBoxItem_OnPointerEntered">ComboBoxItem 1</ComboBoxItem>
+                <ListViewItem>ListView Item!</ListViewItem>
+
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

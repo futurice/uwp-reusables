@@ -42,6 +42,8 @@ namespace UwpReusables.TestBed
             }
         }
 
+        public List<string> SearchableBoxItems => new List<string> {"Item 1", "Item 2"};
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -80,6 +82,7 @@ namespace UwpReusables.TestBed
         private void ResetDirtyButton_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             IsResetDirtyStateBoxDirty = false;
+            System.Diagnostics.Debugger.Break();
         }
 
         /// <summary>
@@ -153,14 +156,9 @@ namespace UwpReusables.TestBed
             }
         }
 
-        private void ComboBox_OnDropDownOpened(object sender, object e)
+        private void TestComboBoxItem_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            DropdownStatusBlock.Text = "DropdownStatus: Open";
-        }
-
-        private void ComboBox_OnDropDownClosed(object sender, object e)
-        {
-            DropdownStatusBlock.Text = "DropdownStatus: Closed";
+            VisualStateManager.GoToState(TestComboBoxItem, "PointerOver", true);
         }
     }
 }
